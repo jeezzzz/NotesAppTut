@@ -43,6 +43,24 @@ class HomeFragment : Fragment() {
             binding.homeRecyclerView.adapter = NoteAdapter(requireContext(),notesList)
         }
 
+        binding.searchNoteFab.setOnClickListener {
+            val query=binding.searchBar.editableText.toString()
+            viewModel.searchNote(query).observe(viewLifecycleOwner) { notesList ->
+                if(notesList!=null){
+                    if (notesList.isNotEmpty()){
+                        binding.homeRecyclerView.visibility=View.VISIBLE
+                        binding.emptyNotesImage.visibility=View.GONE
+                    }
+                    else{
+                        binding.homeRecyclerView.visibility=View.GONE
+                        binding.emptyNotesImage.visibility=View.VISIBLE
+                    }
+                }
+                binding.homeRecyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                binding.homeRecyclerView.adapter = NoteAdapter(requireContext(),notesList)
+            }
+        }
+
         binding.addNoteFab.setOnClickListener {
             Navigation.findNavController(it).navigate(R.id.action_homeFragment_to_addNoteFragment)
         }

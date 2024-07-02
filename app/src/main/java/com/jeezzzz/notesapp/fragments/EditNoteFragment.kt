@@ -29,23 +29,24 @@ class EditNoteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentEditNoteBinding.inflate(layoutInflater, container, false)
-        binding.editNoteTitle.setText(notes.note!!.title)
-        binding.editNoteDesc.setText(notes.note!!.desc)
+        binding.editNoteTitle.setText(notes.data.title)
+        binding.editNoteDesc.setText(notes.data.desc)
         binding.editNoteFab.setOnClickListener {
             val title=binding.editNoteTitle.text.toString()
             val desc=binding.editNoteDesc.text.toString()
 
             if(title.isNotEmpty() && desc.isNotEmpty()){
-                val data= Note(notes.note!!.id,title,desc)
+                val data=Note(notes.data.id,title,desc)
                 viewModel.addNote(data)
                 Toast.makeText(context, "Note Updated", Toast.LENGTH_SHORT).show()
                 Navigation.findNavController(it).navigate(R.id.action_editNoteFragment_to_homeFragment)
+
             }else{
                 Toast.makeText(context, "Enter Details", Toast.LENGTH_SHORT).show()
             }
         }
         binding.deleteNoteFab.setOnClickListener {
-            viewModel.deleteNote(notes.note!!)
+            viewModel.deleteNote(notes.data)
             Navigation.findNavController(it).navigate(R.id.action_editNoteFragment_to_homeFragment)
         }
         return binding.root
